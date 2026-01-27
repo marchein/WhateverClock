@@ -1,0 +1,5 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stundenzeiger (10 Uhr) -->
+  <rect x="500" y="272" width="32" height="270" rx="12" fill="#111827"
+        transform="rotate(-50 512 512)"/>
+</svg>

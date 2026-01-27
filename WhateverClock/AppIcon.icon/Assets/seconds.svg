@@ -1,0 +1,7 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sekundenzeiger (rot, bei 25s) -->
+  <rect x="500" y="190" width="24" height="370" rx="8" fill="#E11D48"
+        transform="rotate(180 512 512)"/>
+  <!-- Zentrum -->
+  <circle cx="512" cy="512" r="32" fill="#111827" stroke="#F9FAFB" stroke-width="10"/>
+</svg>
