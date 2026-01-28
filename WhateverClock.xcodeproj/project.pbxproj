@@ -19,6 +19,13 @@
 				"Extensions/Color+Hex.swift",
 			);
 		};
+		2B4E09E156104BC697AAC480 /* Exceptions for "WhateverClockWidget" folder in "Copy Bundle Resources" phase from "WhateverClockWidget" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 7D86EA61C5F344CCAB11835A /* Resources */;
+			membershipExceptions = (
+				Info.plist,
+			);
+		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +39,9 @@
 		};
 		6D8FD2A31ECC44A5A7F89F4F /* WhateverClockWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				2B4E09E156104BC697AAC480 /* Exceptions for "WhateverClockWidget" folder in "Copy Bundle Resources" phase from "WhateverClockWidget" target */,
+			);
 			path = WhateverClockWidget;
 			sourceTree = "<group>";
 		};
