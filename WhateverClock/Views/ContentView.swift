@@ -28,7 +28,8 @@ struct ContentView: View {
                     date: clockModel.date,
                     showSeconds: settings.showSeconds,
                     showMilliseconds: settings.showMilliseconds,
-                    show24h: settings.show24h
+                    show24h: settings.show24h,
+                    textColor: settings.color(from: settings.digitalColorHex)
                 )
                 
             }

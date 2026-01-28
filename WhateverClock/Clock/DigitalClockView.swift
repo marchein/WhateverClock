@@ -26,10 +26,13 @@ struct DigitalClockView: View {
     let showMilliseconds: Bool
     /// Whether to use 24-hour time format.
     let show24h: Bool
+    /// Color for the digital clock text.
+    let textColor: Color
     
     var body: some View {
         Text(dateString(from: date))
             .font(.system(size: 47, weight: .semibold, design: .monospaced))
+            .foregroundColor(textColor)
             .shadow(radius: 4)
             .accessibilityLabel(dateString(from: date))
     }

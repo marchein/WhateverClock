@@ -64,7 +64,7 @@ struct ClassicAnalogClockView: View {
                 }
                 
                 // Numbers
-                ForEach(1...12, id: \ .self) { hour in
+                ForEach(1...12, id: \.self) { hour in
                     let angle = Double(hour) * .pi / 6
                     // Move numbers further away from indices by increasing the offset
                     let r: CGFloat = clockSize/2 - borderWidth(for: clockSize) - indexLengthHour(for: clockSize) - clockSize * 0.08
