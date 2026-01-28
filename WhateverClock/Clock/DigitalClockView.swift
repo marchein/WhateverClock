@@ -8,14 +8,56 @@
 import SwiftUI
 
 /**
+ Cached date formatters for digital clock display to avoid repeated initialization overhead.
+ */
+private enum ClockDateFormatters {
+    /// Formatters for different time display configurations.
+    static let hour24: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+    
+    static let hour24Seconds: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
+    
+    static let hour24Milliseconds: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss.SS"
+        return formatter
+    }()
+    
+    static let hour12: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        return formatter
+    }()
+    
+    static let hour12Seconds: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm:ss a"
+        return formatter
+    }()
+    
+    static let hour12Milliseconds: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm:ss.SS a"
+        return formatter
+    }()
+}
+
+/**
  Digital clock, format and text color configurable.
  
  - Parameters:
-    - date: Current time to display.
-    - showSeconds: Show seconds if true.
-    - showMilliseconds: Show milliseconds if true. Only relevant if showSeconds is also true.
-    - show24h: Use 24h or 12h format.
-    - textColor: Color for clock text.
+     - date: Current time to display.
+     - showSeconds: Show seconds if true.
+     - showMilliseconds: Show milliseconds if true. Only relevant if showSeconds is also true.
+     - show24h: Use 24h or 12h format.
+     - textColor: Color for clock text.
  */
 struct DigitalClockView: View {
     /// The date to display in the clock.
@@ -40,17 +82,23 @@ struct DigitalClockView: View {
     /**
      Formats the date display as a string according to configuration.
      
+     Uses cached DateFormatter instances for improved performance.
+     
      - Parameter date: The `Date` to format.
      - Returns: A formatted time string, optionally including seconds and milliseconds, and using either 24h or 12h format.
      */
     private func dateString(from date: Date) -> String {
-        let formatter = DateFormatter()
         let showMs = showSeconds && showMilliseconds
+        let formatter: DateFormatter
+        
         if show24h {
-            formatter.dateFormat = showMs ? "HH:mm:ss.SS" : (showSeconds ? "HH:mm:ss" : "HH:mm")
+            formatter = showMs ? ClockDateFormatters.hour24Milliseconds : 
+                       (showSeconds ? ClockDateFormatters.hour24Seconds : ClockDateFormatters.hour24)
         } else {
-            formatter.dateFormat = showMs ? "h:mm:ss.SS a" : (showSeconds ? "h:mm:ss a" : "h:mm a")
+            formatter = showMs ? ClockDateFormatters.hour12Milliseconds : 
+                       (showSeconds ? ClockDateFormatters.hour12Seconds : ClockDateFormatters.hour12)
         }
+        
         return formatter.string(from: date)
     }
 }

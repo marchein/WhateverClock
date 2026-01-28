@@ -9,6 +9,38 @@ import WidgetKit
 import SwiftUI
 
 /**
+ Cached date formatters for widget time display to avoid repeated initialization overhead.
+ */
+private enum WidgetDateFormatters {
+    /// Formatter for 24-hour time format (HH:mm).
+    static let hour24: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }()
+    
+    /// Formatter for 12-hour time format (h:mm a).
+    static let hour12: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h:mm a"
+        return formatter
+    }()
+}
+
+/**
+ Formats the time without seconds for widget display using cached formatters.
+ 
+ - Parameters:
+    - date: The date to format.
+    - show24h: Whether to use 24-hour format.
+ - Returns: Formatted time string without seconds.
+ */
+private func formatWidgetTime(_ date: Date, show24h: Bool) -> String {
+    let formatter = show24h ? WidgetDateFormatters.hour24 : WidgetDateFormatters.hour12
+    return formatter.string(from: date)
+}
+
+/**
  Helper function to load widget settings from shared App Group storage.
  
  Reads all widget settings from the shared UserDefaults suite and provides
@@ -114,7 +146,7 @@ struct AnalogDigitalClockWidgetView: View {
             // Digital clock on the right
             VStack {
                 Spacer()
-                Text(formatTime(entry.date, show24h: settings.show24h))
+                Text(formatWidgetTime(entry.date, show24h: settings.show24h))
                     .font(.system(size: 32, weight: .semibold, design: .monospaced))
                     .foregroundColor(Color(hex: settings.digitalColor))
                     .minimumScaleFactor(0.5)
@@ -125,20 +157,6 @@ struct AnalogDigitalClockWidgetView: View {
         }
         .padding(8)
         .widgetBackground(Color.clear)
-    }
-    
-    /**
-     Formats the time without seconds for widget display.
-     
-     - Parameters:
-        - date: The date to format.
-        - show24h: Whether to use 24-hour format.
-     - Returns: Formatted time string without seconds.
-     */
-    private func formatTime(_ date: Date, show24h: Bool) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = show24h ? "HH:mm" : "h:mm a"
-        return formatter.string(from: date)
     }
 }
 
@@ -156,7 +174,7 @@ struct DigitalClockWidgetView: View {
         
         VStack {
             Spacer()
-            Text(formatTime(entry.date, show24h: settings.show24h))
+            Text(formatWidgetTime(entry.date, show24h: settings.show24h))
                 .font(.system(size: 48, weight: .semibold, design: .monospaced))
                 .foregroundColor(Color(hex: settings.digitalColor))
                 .minimumScaleFactor(0.5)
@@ -164,19 +182,5 @@ struct DigitalClockWidgetView: View {
             Spacer()
         }
         .widgetBackground(Color.clear)
-    }
-    
-    /**
-     Formats the time without seconds for widget display.
-     
-     - Parameters:
-        - date: The date to format.
-        - show24h: Whether to use 24-hour format.
-     - Returns: Formatted time string without seconds.
-     */
-    private func formatTime(_ date: Date, show24h: Bool) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = show24h ? "HH:mm" : "h:mm a"
-        return formatter.string(from: date)
     }
 }

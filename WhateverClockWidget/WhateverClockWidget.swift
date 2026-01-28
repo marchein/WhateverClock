@@ -76,9 +76,11 @@ struct ClockTimelineProvider: TimelineProvider {
         let now = Date()
         let calendar = Calendar.current
         
-        // Start at the next minute boundary
-        guard let nextMinute = calendar.date(byCounting: .minute, value: 1, from: now),
-              let startOfNextMinute = calendar.date(bySetting: .second, value: 0, of: nextMinute) else {
+        // Get the start of the next minute
+        var components = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: now)
+        components.minute = (components.minute ?? 0) + 1
+        
+        guard let startOfNextMinute = calendar.date(from: components) else {
             // Fallback: update in 1 minute
             let entry = ClockEntry(date: now)
             let nextUpdate = calendar.date(byAdding: .minute, value: 1, to: now) ?? now
