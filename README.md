@@ -10,6 +10,8 @@ The main goal of WhateverClock is to provide a clear, accurate, and visually app
 
 - **Accurate Analog Clock:** Real-time, smoothly animated analog clock face to mimic mechanical watches.
 - **Clear Digital Display:** Large, easy-to-read digital clock supporting 12/24 hour formats.
+- **Home Screen Widgets:** Add beautiful analog, digital, or combined clock widgets to your home screen.
+- **Customizable Appearance:** Personalize colors for clock face, hands, numbers, and digital display.
 - **Battery Efficiency:** Optimized for long usage without draining your device.
 - **Localization Ready:** Prepared for multiple languages (contributions welcome!).
 

@@ -34,9 +34,7 @@ struct AnalogClockWidgetView: View {
                 secondsColor: Color(hex: settings.secondsColor)
             )
         }
-        .containerBackground(for: .widget) {
-            Color.clear
-        }
+        .widgetBackground(Color.clear)
     }
     
     /**
@@ -108,9 +106,7 @@ struct AnalogDigitalClockWidgetView: View {
             .frame(maxWidth: .infinity)
         }
         .padding(8)
-        .containerBackground(for: .widget) {
-            Color.clear
-        }
+        .widgetBackground(Color.clear)
     }
     
     /**
@@ -178,9 +174,7 @@ struct DigitalClockWidgetView: View {
                 .lineLimit(1)
             Spacer()
         }
-        .containerBackground(for: .widget) {
-            Color.clear
-        }
+        .widgetBackground(Color.clear)
     }
     
     /**
