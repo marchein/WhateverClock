@@ -23,6 +23,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+			
+				44F6864AED504451964C363C /* WhateverClockWidget.appex */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
