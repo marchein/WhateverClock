@@ -16,6 +16,10 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXBuildFile section */
+		EC1AFE49CDDB4255A85BF1BE /* WhateverClockWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 44F6864AED504451964C363C /* WhateverClockWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		572D4FA2FF714ACEBF400FC2 /* Embed Foundation Extensions */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -24,7 +28,7 @@
 			dstSubfolderSpec = 13;
 			files = (
 			
-				44F6864AED504451964C363C /* WhateverClockWidget.appex */,
+				EC1AFE49CDDB4255A85BF1BE /* WhateverClockWidget.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
