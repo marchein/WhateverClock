@@ -1,33 +1,56 @@
 import SwiftUI
 import Combine
+import WidgetKit
+
+/// Shared UserDefaults suite used by both the app and the widget extension.
+private let appGroupStore = UserDefaults(suiteName: "group.de.marc-hein.WhateverClock")
 
 /**
  `SettingsModel` stores and manages user settings for WhateverClock, with automatic persistence using `@AppStorage`.
+ 
+ Settings are written to a shared App Group UserDefaults container so that the widget
+ extension can read them without any additional synchronisation.
  
  Provides convenience methods for color manipulation and resetting settings to default values.
  Designed for use as an observable object in the application's settings workflow.
  */
 final class SettingsModel: ObservableObject {
     /// Hex string representing the clock face color. Persisted via AppStorage.
-    @AppStorage("clockFaceColor") var clockFaceColorHex: String = Color.white.hex
+    @AppStorage("clockFaceColor", store: appGroupStore) var clockFaceColorHex: String = Color.white.hex
     /// Hex string representing the number color. Persisted via AppStorage.
-    @AppStorage("numberColor") var numberColorHex: String = Color.black.hex
+    @AppStorage("numberColor", store: appGroupStore) var numberColorHex: String = Color.black.hex
     /// Hex string representing the index color. Persisted via AppStorage.
-    @AppStorage("indexColor") var indexColorHex: String = Color.black.hex
+    @AppStorage("indexColor", store: appGroupStore) var indexColorHex: String = Color.black.hex
     /// Hex string representing the hands color. Persisted via AppStorage.
-    @AppStorage("handsColor") var handsColorHex: String = Color.black.hex
+    @AppStorage("handsColor", store: appGroupStore) var handsColorHex: String = Color.black.hex
     /// Hex string representing the seconds hand color. Persisted via AppStorage.
-    @AppStorage("secondsColor") var secondsColorHex: String = Color.red.hex
+    @AppStorage("secondsColor", store: appGroupStore) var secondsColorHex: String = Color.red.hex
     /// Boolean value that couples index and number color. Persisted via AppStorage.
-    @AppStorage("coupleIndexNumberColor") var coupleIndexNumberColor: Bool = true
+    @AppStorage("coupleIndexNumberColor", store: appGroupStore) var coupleIndexNumberColor: Bool = true
     /// Double value representing clock size. Persisted via AppStorage.
-    @AppStorage("clockSize") var clockSize: Double = 320
+    @AppStorage("clockSize", store: appGroupStore) var clockSize: Double = 320
     /// Boolean value for seconds hand visibility. Persisted via AppStorage.
-    @AppStorage("showSeconds") var showSeconds: Bool = true
+    @AppStorage("showSeconds", store: appGroupStore) var showSeconds: Bool = true
     /// Boolean value for milliseconds hand visibility. Persisted via AppStorage.
-    @AppStorage("showMilliseconds") var showMilliseconds: Bool = false
+    @AppStorage("showMilliseconds", store: appGroupStore) var showMilliseconds: Bool = false
     /// Boolean value for 24-hour display. Persisted via AppStorage.
-    @AppStorage("show24h") var show24h: Bool = true
+    @AppStorage("show24h", store: appGroupStore) var show24h: Bool = true
+
+    /// Cancellable for observing settings changes and triggering widget reloads.
+    private var widgetReloadCancellable: AnyCancellable?
+
+    init() {
+        // Reload the widget timeline whenever any setting changes so the widget
+        // always reflects the latest appearance.
+        widgetReloadCancellable = objectWillChange
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                // Execute after the current change is committed.
+                DispatchQueue.main.async {
+                    WidgetCenter.shared.reloadAllTimelines()
+                }
+            }
+    }
 
     /**
      Converts a hex string to a `Color` object.
