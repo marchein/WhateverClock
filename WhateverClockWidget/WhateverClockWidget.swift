@@ -23,7 +23,6 @@ struct ClockWidgetSettings {
     let numberColorHex: String
     let indexColorHex: String
     let handsColorHex: String
-    let secondsColorHex: String
     let coupleIndexNumberColor: Bool
     let showSeconds: Bool
 
@@ -33,7 +32,6 @@ struct ClockWidgetSettings {
         numberColorHex: "#000000",
         indexColorHex: "#000000",
         handsColorHex: "#000000",
-        secondsColorHex: "#FF0000",
         coupleIndexNumberColor: true,
         showSeconds: true
     )
@@ -46,7 +44,6 @@ struct ClockWidgetSettings {
             numberColorHex: store.string(forKey: "numberColor") ?? "#000000",
             indexColorHex: store.string(forKey: "indexColor") ?? "#000000",
             handsColorHex: store.string(forKey: "handsColor") ?? "#000000",
-            secondsColorHex: store.string(forKey: "secondsColor") ?? "#FF0000",
             coupleIndexNumberColor: store.object(forKey: "coupleIndexNumberColor") as? Bool ?? true,
             showSeconds: store.object(forKey: "showSeconds") as? Bool ?? true
         )
@@ -57,7 +54,6 @@ struct ClockWidgetSettings {
     /// Respects the "couple index and number colors" toggle.
     var indexColor: Color { Color(hex: coupleIndexNumberColor ? numberColorHex : indexColorHex) }
     var handsColor: Color { Color(hex: handsColorHex) }
-    var secondsColor: Color { Color(hex: secondsColorHex) }
 }
 
 // MARK: - Timeline Entry
@@ -142,9 +138,8 @@ private struct WidgetAnalogClockView: View {
     let indexColor: Color
     let faceColor: Color
     let handsColor: Color
-    let secondsColor: Color
 
-    private func borderWidth(for size: CGFloat) -> CGFloat { size * 0.05 }
+    private func borderWidth(for size: CGFloat) -> CGFloat { size * 0.035 }
     private func indexLengthHour(for size: CGFloat) -> CGFloat { size * 0.07 }
     private func indexLengthMinute(for size: CGFloat) -> CGFloat { size * 0.04 }
     private func hourHandWidth(for size: CGFloat) -> CGFloat { size * 0.025 }
@@ -157,7 +152,7 @@ private struct WidgetAnalogClockView: View {
         GeometryReader { geometry in
             let availableWidth = geometry.size.width
             let availableHeight = geometry.size.height
-            let clockSize = min(availableWidth, availableHeight)
+            let clockSize = min(availableWidth, availableHeight) + 10
             ZStack {
                 // Face & border
                 Circle()
@@ -167,7 +162,6 @@ private struct WidgetAnalogClockView: View {
                             .stroke(Color(.sRGB, white: 0.16, opacity: 1.0),
                                     lineWidth: borderWidth(for: clockSize))
                     )
-                    .shadow(color: Color(UIColor.label), radius: 4)
 
                 // Indices
                 ForEach(0..<60) { tick in
@@ -207,7 +201,6 @@ private struct WidgetAnalogClockView: View {
                 let comps = calendar.dateComponents([.hour, .minute, .second], from: date)
                 let hour = CGFloat(comps.hour ?? 0) + CGFloat(comps.minute ?? 0) / 60
                 let minute = CGFloat(comps.minute ?? 0) + CGFloat(comps.second ?? 0) / 60
-                let second = CGFloat(comps.second ?? 0)
 
                 // Hands
                 WidgetRoundedHand(
@@ -223,25 +216,13 @@ private struct WidgetAnalogClockView: View {
                     rotation: .degrees(Double(minute) * 6)
                 )
 
-                if showSeconds {
-                    WidgetSecondHand(
-                        length: clockSize / 2 - borderWidth(for: clockSize) - clockSize * 0.075,
-                        color: secondsColor,
-                        rotation: .degrees(Double(second) * 6)
-                    )
-                    Circle()
-                        .stroke(secondsColor, lineWidth: clockSize * 0.0062)
-                        .background(Circle().fill(secondsColor))
-                        .frame(width: handRadius(for: clockSize),
-                               height: handRadius(for: clockSize))
-                } else {
-                    Circle()
-                        .stroke(Color(.sRGB, white: 0.18, opacity: 1.0),
-                                lineWidth: clockSize * 0.0062)
-                        .background(Circle().fill(faceColor))
-                        .frame(width: handRadius(for: clockSize),
-                               height: handRadius(for: clockSize))
-                }
+
+                Circle()
+                    .stroke(Color(.sRGB, white: 0.18, opacity: 1.0),
+                            lineWidth: clockSize * 0.0062)
+                    .background(Circle().fill(faceColor))
+                    .frame(width: handRadius(for: clockSize),
+                           height: handRadius(for: clockSize))
             }
             .frame(width: clockSize, height: clockSize)
             .position(x: availableWidth / 2, y: availableHeight / 2)
@@ -258,6 +239,8 @@ struct WhateverClockWidgetEntryView: View {
     var body: some View {
         Group {
             switch widgetFamily {
+            case .systemLarge:
+                largeBody
             case .systemMedium:
                 mediumBody
             default:
@@ -276,10 +259,8 @@ struct WhateverClockWidgetEntryView: View {
             numberColor: entry.settings.numberColor,
             indexColor: entry.settings.indexColor,
             faceColor: entry.settings.faceColor,
-            handsColor: entry.settings.handsColor,
-            secondsColor: entry.settings.secondsColor
+            handsColor: entry.settings.handsColor
         )
-        .padding(8)
     }
 
     /// Medium widget: analog clock on the left, digital time on the right.
@@ -292,8 +273,7 @@ struct WhateverClockWidgetEntryView: View {
                 numberColor: entry.settings.numberColor,
                 indexColor: entry.settings.indexColor,
                 faceColor: entry.settings.faceColor,
-                handsColor: entry.settings.handsColor,
-                secondsColor: entry.settings.secondsColor
+                handsColor: entry.settings.handsColor
             )
             .padding(8)
 
@@ -312,6 +292,19 @@ struct WhateverClockWidgetEntryView: View {
             .padding(.trailing, 12)
             .frame(maxWidth: .infinity)
         }
+    }
+    
+    /// Large widget: analog clock filling the available space.
+    @ViewBuilder
+    private var largeBody: some View {
+        WidgetAnalogClockView(
+            date: entry.date,
+            showSeconds: entry.settings.showSeconds,
+            numberColor: entry.settings.numberColor,
+            indexColor: entry.settings.indexColor,
+            faceColor: entry.settings.faceColor,
+            handsColor: entry.settings.handsColor
+        )
     }
 }
 
@@ -339,7 +332,7 @@ struct WhateverClockWidget: Widget {
         }
         .configurationDisplayName("WhateverClock")
         .description("Shows the WhateverClock analog clock with your custom colors.")
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemExtraLarge])
     }
 }
 
@@ -361,6 +354,12 @@ struct WhateverClockWidgetBundle: WidgetBundle {
 }
 
 #Preview(as: .systemMedium) {
+    WhateverClockWidget()
+} timeline: {
+    ClockEntry(date: .now, settings: .defaults)
+}
+
+#Preview(as: .systemLarge) {
     WhateverClockWidget()
 } timeline: {
     ClockEntry(date: .now, settings: .defaults)

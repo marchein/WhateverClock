@@ -6,10 +6,48 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		5B4F030C2F27B00000C71D41 /* WhateverClockWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5B4F03002F27B00000C71D41 /* WhateverClockWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5B4F030B2F27B00000C71D41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B4F02752F27A3D300C71D41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B4F03042F27B00000C71D41;
+			remoteInfo = WhateverClockWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5B4F03092F27B00000C71D41 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				5B4F030C2F27B00000C71D41 /* WhateverClockWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		5B4F027D2F27A3D300C71D41 /* WhateverClock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhateverClock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B4F03002F27B00000C71D41 /* WhateverClockWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WhateverClockWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5BB990422F7281F90069A37B /* Exceptions for "WhateverClock" folder in "WhateverClockWidget" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Extensions/Color+Hex.swift",
+			);
+			target = 5B4F03042F27B00000C71D41 /* WhateverClockWidget */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 		5B4F02A92F27A92900C71D41 /* Exceptions for "WhateverClock" folder in "Copy Bundle Resources" phase from "WhateverClock" target */ = {
@@ -17,15 +55,14 @@
 			buildPhase = 5B4F027B2F27A3D300C71D41 /* Resources */;
 			membershipExceptions = (
 				"Extensions/Color+Hex.swift",
-				"WhateverClock.entitlements",
+				WhateverClock.entitlements,
 			);
 		};
 		5B4F030E2F27B00000C71D41 /* Exceptions for "WhateverClockWidget" folder in "Copy Bundle Resources" phase from "WhateverClockWidget" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 5B4F03032F27B00000C71D41 /* Resources */;
 			membershipExceptions = (
-				"WhateverClockWidget.entitlements",
-				"WhateverClockWidgetInfo.plist",
+				WhateverClockWidget.entitlements,
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
@@ -35,6 +72,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				5B4F02A92F27A92900C71D41 /* Exceptions for "WhateverClock" folder in "Copy Bundle Resources" phase from "WhateverClock" target */,
+				5BB990422F7281F90069A37B /* Exceptions for "WhateverClock" folder in "WhateverClockWidget" target */,
 			);
 			path = WhateverClock;
 			sourceTree = "<group>";
@@ -207,34 +245,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXBuildFile section */
-		5B4F030C2F27B00000C71D41 /* WhateverClockWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 5B4F03002F27B00000C71D41 /* WhateverClockWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-/* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		5B4F03092F27B00000C71D41 /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				5B4F030C2F27B00000C71D41 /* WhateverClockWidget.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXContainerItemProxy section */
-		5B4F030B2F27B00000C71D41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5B4F02752F27A3D300C71D41 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 5B4F03042F27B00000C71D41;
-			remoteInfo = WhateverClockWidget;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXTargetDependency section */
 		5B4F030A2F27B00000C71D41 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -369,7 +379,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WhateverClock/WhateverClock.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = UJR28ZV94C;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -389,7 +399,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
@@ -420,7 +430,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WhateverClock/WhateverClock.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = UJR28ZV94C;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -440,7 +450,7 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.2;
@@ -470,11 +480,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WhateverClockWidget/WhateverClockWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = UJR28ZV94C;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = WhateverClockWidget/WhateverClockWidgetInfo.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.marc-hein.WhateverClock.WhateverClockWidget";
@@ -497,11 +507,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = WhateverClockWidget/WhateverClockWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = UJR28ZV94C;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = WhateverClockWidget/WhateverClockWidgetInfo.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.marc-hein.WhateverClock.WhateverClockWidget";
