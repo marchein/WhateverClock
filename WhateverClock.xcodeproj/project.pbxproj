@@ -24,8 +24,8 @@
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 5B4F03032F27B00000C71D41 /* Resources */;
 			membershipExceptions = (
-				"Info.plist",
 				"WhateverClockWidget.entitlements",
+				"WhateverClockWidgetInfo.plist",
 			);
 		};
 /* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
@@ -473,7 +473,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UJR28ZV94C;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = WhateverClockWidget/Info.plist;
+				INFOPLIST_FILE = WhateverClockWidget/WhateverClockWidgetInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.0;
@@ -500,7 +500,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UJR28ZV94C;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = WhateverClockWidget/Info.plist;
+				INFOPLIST_FILE = WhateverClockWidget/WhateverClockWidgetInfo.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.0;
