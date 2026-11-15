@@ -8,45 +8,58 @@
 import SwiftUI
 
 /**
- Digital clock, format and text color configurable.
- 
+ Digital clock, format configurable.
+
  - Parameters:
     - date: Current time to display.
     - showSeconds: Show seconds if true.
-    - showMilliseconds: Show milliseconds if true. Only relevant if showSeconds is also true.
+    - showMilliseconds: Show fractional seconds if true. Only relevant if showSeconds is also true.
     - show24h: Use 24h or 12h format.
-    - textColor: Color for clock text.
  */
 struct DigitalClockView: View {
-    /// The date to display in the clock.
     let date: Date
-    /// Whether to show seconds in the clock.
     let showSeconds: Bool
-    /// Whether to show milliseconds in the clock. Only relevant if showSeconds is true.
     let showMilliseconds: Bool
-    /// Whether to use 24-hour time format.
     let show24h: Bool
-    
+
     var body: some View {
-        Text(dateString(from: date))
+        let text = Self.string(from: date, showSeconds: showSeconds, showMilliseconds: showMilliseconds, show24h: show24h)
+        Text(text)
             .font(.system(size: 47, weight: .semibold, design: .monospaced))
+            .lineLimit(1)
+            .minimumScaleFactor(0.4)
             .shadow(radius: 4)
-            .accessibilityLabel(dateString(from: date))
+            .padding(.horizontal)
+            .accessibilityLabel(text)
+            .accessibilityIdentifier("digitalClock")
     }
-    
-    /**
-     Formats the date display as a string according to configuration.
-     
-     - Parameter date: The `Date` to format.
-     - Returns: A formatted time string, optionally including seconds and milliseconds, and using either 24h or 12h format.
-     */
-    private func dateString(from date: Date) -> String {
-        let formatter = DateFormatter()
+
+    /// The `DateFormatter` pattern for the given options.
+    static func dateFormat(showSeconds: Bool, showMilliseconds: Bool, show24h: Bool) -> String {
         let showMs = showSeconds && showMilliseconds
         if show24h {
-            formatter.dateFormat = showMs ? "HH:mm:ss.SS" : (showSeconds ? "HH:mm:ss" : "HH:mm")
+            return showMs ? "HH:mm:ss.SS" : (showSeconds ? "HH:mm:ss" : "HH:mm")
         } else {
-            formatter.dateFormat = showMs ? "h:mm:ss.SS a" : (showSeconds ? "h:mm:ss a" : "h:mm a")
+            return showMs ? "h:mm:ss.SS a" : (showSeconds ? "h:mm:ss a" : "h:mm a")
+        }
+    }
+
+    /// Formatters are expensive and this runs every frame, so they are cached per format/locale/time zone.
+    private static var formatterCache: [String: DateFormatter] = [:]
+
+    static func string(from date: Date, showSeconds: Bool, showMilliseconds: Bool, show24h: Bool,
+                       locale: Locale = .autoupdatingCurrent, timeZone: TimeZone = .autoupdatingCurrent) -> String {
+        let format = dateFormat(showSeconds: showSeconds, showMilliseconds: showMilliseconds, show24h: show24h)
+        let key = "\(format)|\(locale.identifier)|\(timeZone.identifier)"
+        let formatter: DateFormatter
+        if let cached = formatterCache[key] {
+            formatter = cached
+        } else {
+            formatter = DateFormatter()
+            formatter.dateFormat = format
+            formatter.locale = locale
+            formatter.timeZone = timeZone
+            formatterCache[key] = formatter
         }
         return formatter.string(from: date)
     }

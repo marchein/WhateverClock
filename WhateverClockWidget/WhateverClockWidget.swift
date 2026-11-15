@@ -8,60 +8,12 @@
 import WidgetKit
 import SwiftUI
 
-// MARK: - App Group identifier
-
-private let appGroupIdentifier = "group.de.marc-hein.WhateverClock"
-
-// MARK: - Clock Settings (read from shared UserDefaults)
-
-/**
- Holds a snapshot of the user's clock appearance settings read from the App Group UserDefaults.
- Falls back to defaults when the shared store is unavailable or a key is missing.
- */
-struct ClockWidgetSettings {
-    let clockFaceColorHex: String
-    let numberColorHex: String
-    let indexColorHex: String
-    let handsColorHex: String
-    let coupleIndexNumberColor: Bool
-    let showSeconds: Bool
-
-    /// Default settings matching the app's initial defaults.
-    static let defaults = ClockWidgetSettings(
-        clockFaceColorHex: "#FFFFFF",
-        numberColorHex: "#000000",
-        indexColorHex: "#000000",
-        handsColorHex: "#000000",
-        coupleIndexNumberColor: true,
-        showSeconds: true
-    )
-
-    /// Reads settings from the shared App Group UserDefaults.
-    static func fromUserDefaults() -> ClockWidgetSettings {
-        let store = UserDefaults(suiteName: appGroupIdentifier) ?? .standard
-        return ClockWidgetSettings(
-            clockFaceColorHex: store.string(forKey: "clockFaceColor") ?? "#FFFFFF",
-            numberColorHex: store.string(forKey: "numberColor") ?? "#000000",
-            indexColorHex: store.string(forKey: "indexColor") ?? "#000000",
-            handsColorHex: store.string(forKey: "handsColor") ?? "#000000",
-            coupleIndexNumberColor: store.object(forKey: "coupleIndexNumberColor") as? Bool ?? true,
-            showSeconds: store.object(forKey: "showSeconds") as? Bool ?? true
-        )
-    }
-
-    var faceColor: Color { Color(hex: clockFaceColorHex) }
-    var numberColor: Color { Color(hex: numberColorHex) }
-    /// Respects the "couple index and number colors" toggle.
-    var indexColor: Color { Color(hex: coupleIndexNumberColor ? numberColorHex : indexColorHex) }
-    var handsColor: Color { Color(hex: handsColorHex) }
-}
-
 // MARK: - Timeline Entry
 
 /// A single point in the widget's timeline carrying the time and current settings snapshot.
 struct ClockEntry: TimelineEntry {
     let date: Date
-    let settings: ClockWidgetSettings
+    let settings: ClockAppearance
 }
 
 // MARK: - Timeline Provider
@@ -73,12 +25,13 @@ struct WhateverClockProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (ClockEntry) -> Void) {
-        completion(ClockEntry(date: Date(), settings: .fromUserDefaults()))
+        completion(ClockEntry(date: Date(), settings: ClockAppearance(store: ClockSettings.sharedStore)))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<ClockEntry>) -> Void) {
-        let settings = ClockWidgetSettings.fromUserDefaults()
-        let now = Date()
+        let settings = ClockAppearance(store: ClockSettings.sharedStore)
+        // Align entries to minute boundaries so the minute hand is exact at every entry.
+        let now = Calendar.current.dateInterval(of: .minute, for: Date())?.start ?? Date()
         // One entry per minute for the next 2 hours so the hands stay accurate.
         let entries: [ClockEntry] = (0..<120).compactMap { offset in
             guard let entryDate = Calendar.current.date(
@@ -106,21 +59,6 @@ private struct WidgetRoundedHand: View {
             .offset(y: -length / 2)
             .rotationEffect(rotation)
             .shadow(color: color.opacity(0.14), radius: 1, x: 0, y: 2)
-    }
-}
-
-/// The thin second hand.
-private struct WidgetSecondHand: View {
-    let length: CGFloat
-    let color: Color
-    let rotation: Angle
-
-    var body: some View {
-        Rectangle()
-            .fill(color)
-            .frame(width: 3, height: length)
-            .offset(y: -length / 2)
-            .rotationEffect(rotation)
     }
 }
 
@@ -196,24 +134,20 @@ private struct WidgetAnalogClockView: View {
                         )
                 }
 
-                // Hand calculations
-                let calendar = Calendar.current
-                let comps = calendar.dateComponents([.hour, .minute, .second], from: date)
-                let hour = CGFloat(comps.hour ?? 0) + CGFloat(comps.minute ?? 0) / 60
-                let minute = CGFloat(comps.minute ?? 0) + CGFloat(comps.second ?? 0) / 60
+                let angles = ClockHandAngles(date: date)
 
                 // Hands
                 WidgetRoundedHand(
                     length: hourHandLength(for: clockSize),
                     width: hourHandWidth(for: clockSize),
                     color: handsColor,
-                    rotation: .degrees(Double(hour) * 30)
+                    rotation: .degrees(angles.hour)
                 )
                 WidgetRoundedHand(
                     length: minuteHandLength(for: clockSize),
                     width: minuteHandWidth(for: clockSize),
                     color: handsColor,
-                    rotation: .degrees(Double(minute) * 6)
+                    rotation: .degrees(angles.minute)
                 )
 
 
@@ -332,7 +266,7 @@ struct WhateverClockWidget: Widget {
         }
         .configurationDisplayName("WhateverClock")
         .description("Shows the WhateverClock analog clock with your custom colors.")
-        .supportedFamilies([.systemSmall, .systemMedium, .systemExtraLarge])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
     }
 }
 

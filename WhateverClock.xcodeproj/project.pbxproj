@@ -18,6 +18,20 @@
 			remoteGlobalIDString = 5B4F03042F27B00000C71D41;
 			remoteInfo = WhateverClockWidget;
 		};
+		5BC200000000000000010007 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B4F02752F27A3D300C71D41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B4F027C2F27A3D300C71D41;
+			remoteInfo = WhateverClock;
+		};
+		5BC200000000000000020007 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5B4F02752F27A3D300C71D41 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B4F027C2F27A3D300C71D41;
+			remoteInfo = WhateverClock;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,6 +51,8 @@
 /* Begin PBXFileReference section */
 		5B4F027D2F27A3D300C71D41 /* WhateverClock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhateverClock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B4F03002F27B00000C71D41 /* WhateverClockWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = WhateverClockWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BC200000000000000010002 /* WhateverClockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhateverClockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BC200000000000000020002 /* WhateverClockUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhateverClockUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -44,34 +60,33 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"Extensions/Color+Hex.swift",
+				Shared/ClockHandAngles.swift,
+				Shared/ClockSettings.swift,
+			);
+			target = 5B4F03042F27B00000C71D41 /* WhateverClockWidget */;
+		};
+		5BC1000000000000000000E1 /* Exceptions for "WhateverClock" folder in "WhateverClock" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				WhateverClock.entitlements,
+			);
+			target = 5B4F027C2F27A3D300C71D41 /* WhateverClock */;
+		};
+		5BC1000000000000000000E2 /* Exceptions for "WhateverClockWidget" folder in "WhateverClockWidget" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				WhateverClockWidget.entitlements,
+				WhateverClockWidgetInfo.plist,
 			);
 			target = 5B4F03042F27B00000C71D41 /* WhateverClockWidget */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		5B4F02A92F27A92900C71D41 /* Exceptions for "WhateverClock" folder in "Copy Bundle Resources" phase from "WhateverClock" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 5B4F027B2F27A3D300C71D41 /* Resources */;
-			membershipExceptions = (
-				"Extensions/Color+Hex.swift",
-				WhateverClock.entitlements,
-			);
-		};
-		5B4F030E2F27B00000C71D41 /* Exceptions for "WhateverClockWidget" folder in "Copy Bundle Resources" phase from "WhateverClockWidget" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 5B4F03032F27B00000C71D41 /* Resources */;
-			membershipExceptions = (
-				WhateverClockWidget.entitlements,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5B4F027F2F27A3D300C71D41 /* WhateverClock */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				5B4F02A92F27A92900C71D41 /* Exceptions for "WhateverClock" folder in "Copy Bundle Resources" phase from "WhateverClock" target */,
+				5BC1000000000000000000E1 /* Exceptions for "WhateverClock" folder in "WhateverClock" target */,
 				5BB990422F7281F90069A37B /* Exceptions for "WhateverClock" folder in "WhateverClockWidget" target */,
 			);
 			path = WhateverClock;
@@ -80,9 +95,19 @@
 		5B4F03052F27B00000C71D41 /* WhateverClockWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				5B4F030E2F27B00000C71D41 /* Exceptions for "WhateverClockWidget" folder in "Copy Bundle Resources" phase from "WhateverClockWidget" target */,
+				5BC1000000000000000000E2 /* Exceptions for "WhateverClockWidget" folder in "WhateverClockWidget" target */,
 			);
 			path = WhateverClockWidget;
+			sourceTree = "<group>";
+		};
+		5BC200000000000000010003 /* WhateverClockTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WhateverClockTests;
+			sourceTree = "<group>";
+		};
+		5BC200000000000000020003 /* WhateverClockUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = WhateverClockUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -102,6 +127,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5BC200000000000000010005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5BC200000000000000020005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -111,6 +150,8 @@
 				5B4F027E2F27A3D300C71D41 /* Products */,
 				5B4F027F2F27A3D300C71D41 /* WhateverClock */,
 				5B4F03052F27B00000C71D41 /* WhateverClockWidget */,
+				5BC200000000000000010003 /* WhateverClockTests */,
+				5BC200000000000000020003 /* WhateverClockUITests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -119,6 +160,8 @@
 			children = (
 				5B4F027D2F27A3D300C71D41 /* WhateverClock.app */,
 				5B4F03002F27B00000C71D41 /* WhateverClockWidget.appex */,
+				5BC200000000000000010002 /* WhateverClockTests.xctest */,
+				5BC200000000000000020002 /* WhateverClockUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -172,6 +215,52 @@
 			productReference = 5B4F03002F27B00000C71D41 /* WhateverClockWidget.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		5BC200000000000000010001 /* WhateverClockTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5BC200000000000000010009 /* Build configuration list for PBXNativeTarget "WhateverClockTests" */;
+			buildPhases = (
+				5BC200000000000000010004 /* Sources */,
+				5BC200000000000000010005 /* Frameworks */,
+				5BC200000000000000010006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5BC200000000000000010008 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5BC200000000000000010003 /* WhateverClockTests */,
+			);
+			name = WhateverClockTests;
+			packageProductDependencies = (
+			);
+			productName = WhateverClockTests;
+			productReference = 5BC200000000000000010002 /* WhateverClockTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		5BC200000000000000020001 /* WhateverClockUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5BC200000000000000020009 /* Build configuration list for PBXNativeTarget "WhateverClockUITests" */;
+			buildPhases = (
+				5BC200000000000000020004 /* Sources */,
+				5BC200000000000000020005 /* Frameworks */,
+				5BC200000000000000020006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5BC200000000000000020008 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				5BC200000000000000020003 /* WhateverClockUITests */,
+			);
+			name = WhateverClockUITests;
+			packageProductDependencies = (
+			);
+			productName = WhateverClockUITests;
+			productReference = 5BC200000000000000020002 /* WhateverClockUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -187,6 +276,14 @@
 					};
 					5B4F03042F27B00000C71D41 = {
 						CreatedOnToolsVersion = 26.2;
+					};
+					5BC200000000000000010001 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 5B4F027C2F27A3D300C71D41;
+					};
+					5BC200000000000000020001 = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 5B4F027C2F27A3D300C71D41;
 					};
 				};
 			};
@@ -207,6 +304,8 @@
 			targets = (
 				5B4F027C2F27A3D300C71D41 /* WhateverClock */,
 				5B4F03042F27B00000C71D41 /* WhateverClockWidget */,
+				5BC200000000000000010001 /* WhateverClockTests */,
+				5BC200000000000000020001 /* WhateverClockUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -220,6 +319,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		5B4F03032F27B00000C71D41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5BC200000000000000010006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5BC200000000000000020006 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -243,6 +356,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5BC200000000000000010004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5BC200000000000000020004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -250,6 +377,16 @@
 			isa = PBXTargetDependency;
 			target = 5B4F03042F27B00000C71D41 /* WhateverClockWidget */;
 			targetProxy = 5B4F030B2F27B00000C71D41 /* PBXContainerItemProxy */;
+		};
+		5BC200000000000000010008 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5B4F027C2F27A3D300C71D41 /* WhateverClock */;
+			targetProxy = 5BC200000000000000010007 /* PBXContainerItemProxy */;
+		};
+		5BC200000000000000020008 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5B4F027C2F27A3D300C71D41 /* WhateverClock */;
+			targetProxy = 5BC200000000000000020007 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -387,6 +524,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = WhateverClock;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -438,6 +576,7 @@
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = WhateverClock;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -528,6 +667,100 @@
 			};
 			name = Release;
 		};
+		5BC20000000000000001000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhateverClock.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WhateverClock";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = UJR28ZV94C;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.marc-hein.WhateverClockTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5BC20000000000000001000B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhateverClock.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/WhateverClock";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = UJR28ZV94C;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.marc-hein.WhateverClockTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		5BC20000000000000002000A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				TEST_TARGET_NAME = WhateverClock;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = UJR28ZV94C;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.marc-hein.WhateverClockUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5BC20000000000000002000B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				TEST_TARGET_NAME = WhateverClock;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = UJR28ZV94C;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.marc-hein.WhateverClockUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -554,6 +787,24 @@
 			buildConfigurations = (
 				5B4F03062F27B00000C71D41 /* Debug */,
 				5B4F03072F27B00000C71D41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5BC200000000000000010009 /* Build configuration list for PBXNativeTarget "WhateverClockTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BC20000000000000001000A /* Debug */,
+				5BC20000000000000001000B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5BC200000000000000020009 /* Build configuration list for PBXNativeTarget "WhateverClockUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5BC20000000000000002000A /* Debug */,
+				5BC20000000000000002000B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

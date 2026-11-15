@@ -1,48 +1,54 @@
 import SwiftUI
 
 /// The main content view displaying an analog and digital clock with access to settings.
-/// - Requires: Content must be displayed within a navigation container for the toolbar to appear.
 struct ContentView: View {
-    /// Holds the current time for the clock views.
-    @StateObject private var clockModel = ClockModel()
     /// Stores the user settings for clock appearance and behavior.
-    @StateObject private var settings = SettingsModel()
+    @ObservedObject var settings: SettingsModel
     /// Determines whether the settings screen is presented.
     @State private var showSettings = false
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 64) {
-                ClassicAnalogClockView(
-                    date: clockModel.date,
-                    showSeconds: settings.showSeconds,
-                    numberColor: settings.color(from: settings.numberColorHex),
-                    indexColor: settings.color(from: settings.coupleIndexNumberColor ? settings.numberColorHex : settings.indexColorHex),
-                    faceColor: settings.color(from: settings.clockFaceColorHex),
-                    handsColor: settings.color(from: settings.handsColorHex),
-                    secondsColor: settings.color(from: settings.secondsColorHex)
-                )
-                
-                
-                DigitalClockView(
-                    date: clockModel.date,
-                    showSeconds: settings.showSeconds,
-                    showMilliseconds: settings.showMilliseconds,
-                    show24h: settings.show24h
-                )
-                
+            // With a second hand we redraw every frame for a smooth sweep; otherwise once per second
+            // is plenty. TimelineView also pauses automatically while the app is in the background.
+            TimelineView(.animation(minimumInterval: settings.showSeconds ? nil : 1)) { context in
+                let layout = verticalSizeClass == .compact
+                    ? AnyLayout(HStackLayout(spacing: 32))
+                    : AnyLayout(VStackLayout(spacing: 48))
+                layout {
+                    ClassicAnalogClockView(
+                        date: context.date,
+                        showSeconds: settings.showSeconds,
+                        numberColor: settings.color(from: settings.numberColorHex),
+                        indexColor: settings.color(from: settings.coupleIndexNumberColor ? settings.numberColorHex : settings.indexColorHex),
+                        faceColor: settings.color(from: settings.clockFaceColorHex),
+                        handsColor: settings.color(from: settings.handsColorHex),
+                        secondsColor: settings.color(from: settings.secondsColorHex)
+                    )
+
+                    DigitalClockView(
+                        date: context.date,
+                        showSeconds: settings.showSeconds,
+                        showMilliseconds: settings.showMilliseconds,
+                        show24h: settings.show24h
+                    )
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.vertical)
             }
-            
-            .navigationTitle("WhateverClock")
+            .navigationTitle(Text(verbatim: "WhateverClock"))
+            .navigationBarTitleDisplayMode(verticalSizeClass == .compact ? .inline : .large)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
+                ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        showSettings.toggle()
+                        showSettings = true
                     } label: {
                         Label("Settings", systemImage: "gearshape")
                     }
                     .buttonStyleIfAvailableGlassProminent()
                     .accessibilityLabel("Open settings")
+                    .accessibilityIdentifier("openSettingsButton")
                 }
             }
         }
@@ -52,11 +58,6 @@ struct ContentView: View {
     }
 }
 
-/// Previews the ContentView within a navigation context.
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ContentView()
-        }
-    }
+#Preview {
+    ContentView(settings: SettingsModel(store: UserDefaults(suiteName: "preview")!, reloadsWidgets: false))
 }

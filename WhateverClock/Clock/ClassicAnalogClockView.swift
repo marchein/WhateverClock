@@ -64,7 +64,7 @@ struct ClassicAnalogClockView: View {
                 }
                 
                 // Numbers
-                ForEach(1...12, id: \ .self) { hour in
+                ForEach(1...12, id: \.self) { hour in
                     let angle = Double(hour) * .pi / 6
                     // Move numbers further away from indices by increasing the offset
                     let r: CGFloat = clockSize/2 - borderWidth(for: clockSize) - indexLengthHour(for: clockSize) - clockSize * 0.08
@@ -78,30 +78,26 @@ struct ClassicAnalogClockView: View {
                 }
                 
                 // Hands calculation
-                let calendar = Calendar.current
-                let comps = calendar.dateComponents([.hour, .minute, .second, .nanosecond], from: date)
-                let hour = CGFloat(comps.hour ?? 0) + CGFloat(comps.minute ?? 0)/60
-                let minute = CGFloat(comps.minute ?? 0) + CGFloat(comps.second ?? 0)/60
-                let second = CGFloat(comps.second ?? 0) + CGFloat(comps.nanosecond ?? 0)/1_000_000_000
+                let angles = ClockHandAngles(date: date)
                 
                 // Hands drawing
                 RoundedHand(
                     length: hourHandLength(for: clockSize),
                     width: hourHandWidth(for: clockSize),
                     color: handsColor,
-                    rotation: .degrees(Double(hour) * 30)
+                    rotation: .degrees(angles.hour)
                 )
                 RoundedHand(
                     length: minuteHandLength(for: clockSize),
                     width: minuteHandWidth(for: clockSize),
                     color: handsColor,
-                    rotation: .degrees(Double(minute) * 6)
+                    rotation: .degrees(angles.minute)
                 )
                 if showSeconds {
                     SecondHand(
                         length: clockSize/2 - borderWidth(for: clockSize) - clockSize * 0.075,
                         color: secondsColor,
-                        rotation: .degrees(Double(second) * 6)
+                        rotation: .degrees(angles.second)
                     )
                     // Center hub
                     Circle()
@@ -118,5 +114,10 @@ struct ClassicAnalogClockView: View {
             .frame(width: clockSize, height: clockSize)
             .position(x: availableWidth/2, y: availableHeight/2)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Analog clock"))
+        .accessibilityValue(Text(date, style: .time))
+        .accessibilityAddTraits(.updatesFrequently)
+        .accessibilityIdentifier("analogClock")
     }
 }

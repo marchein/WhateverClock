@@ -1,111 +1,99 @@
 import SwiftUI
 
 /**
- `SettingsScreen` is a SwiftUI view that presents user configuration options for WhateverClock.
- 
- Displays settings in a structured form, including appearance and behavior customization.
- Automatically persists changes using `SettingsModel`.
- 
- - Note: Uses localization in German for labels.
+ `SettingsScreen` presents user configuration options for WhateverClock.
+ Changes are persisted immediately through `SettingsModel`.
  */
 struct SettingsScreen: View {
-    /// The observable settings model backing this screen.
     @ObservedObject var settings: SettingsModel
-    /// Dismiss environment for closing the settings screen.
     @Environment(\.dismiss) private var dismiss
-    
+    @State private var confirmResetAll = false
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
-                // Section: Display Options
                 Section {
                     Toggle("24 hour display", isOn: $settings.show24h)
+                        .accessibilityIdentifier("toggle24h")
                     Toggle("Show seconds", isOn: $settings.showSeconds)
+                        .accessibilityIdentifier("toggleSeconds")
                     Toggle("Show milliseconds", isOn: $settings.showMilliseconds)
-                        .disabled(!settings.showSeconds) // Only enable if seconds are shown
+                        .disabled(!settings.millisecondsAvailable)
+                        .accessibilityIdentifier("toggleMilliseconds")
                 } header: {
                     Text("Clock")
                 }
-                
-                // Section: Appearance Options
+
                 Section {
-                    ColorPicker("Dial color", selection: Binding(
-                        get: { settings.color(from: settings.clockFaceColorHex) },
-                        set: { settings.setClockFaceColor($0) }
-                    ))
-                    ColorPicker("Number color", selection: Binding(
-                        get: { settings.color(from: settings.numberColorHex) },
-                        set: { settings.setNumberColor($0) }
-                    ))
+                    colorPicker("Dial color", hex: settings.clockFaceColorHex, id: "pickerDialColor", set: settings.setClockFaceColor)
+                    colorPicker("Number color", hex: settings.numberColorHex, id: "pickerNumberColor", set: settings.setNumberColor)
                     Toggle("Couple index and number colors", isOn: $settings.coupleIndexNumberColor)
+                        .accessibilityIdentifier("toggleCoupleColors")
                     if !settings.coupleIndexNumberColor {
-                        ColorPicker("Index color", selection: Binding(
-                            get: { settings.color(from: settings.indexColorHex) },
-                            set: { settings.setIndexColor($0) }
-                        ))
+                        colorPicker("Index color", hex: settings.indexColorHex, id: "pickerIndexColor", set: settings.setIndexColor)
                     }
-                    ColorPicker("Hands color", selection: Binding(
-                        get: { settings.color(from: settings.handsColorHex) },
-                        set: { settings.handsColorHex = $0.hex }
-                    ))
-                    ColorPicker("Secondhand color", selection: Binding(
-                        get: { settings.color(from: settings.secondsColorHex) },
-                        set: { settings.setSecondsColor($0) }
-                    ))
+                    colorPicker("Hands color", hex: settings.handsColorHex, id: "pickerHandsColor", set: settings.setHandsColor)
+                    colorPicker("Secondhand color", hex: settings.secondsColorHex, id: "pickerSecondsColor", set: settings.setSecondsColor)
                 } header: {
                     Text("Design")
                 }
-                
-                // Section: App Version and Build like "1.0.0 (1)"
+
                 Section {
-                    HStack {
-                        Text("App Version")
-                        Spacer()
-                        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String,
-                           let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-                            Text("\(version) (Build \(build))")
-                                .foregroundStyle(.secondary)
-                        } else {
-                            Text("Not available")
-                                .foregroundStyle(.secondary)
-                        }
+                    LabeledContent("App Version") {
+                        Text(Self.versionString)
+                            .accessibilityIdentifier("appVersionValue")
                     }
                 } header: {
                     Text("About")
                 }
-                
-                // Section: Reset Options
+
                 Section {
                     Button("Reset design to default") {
                         settings.resetDesign()
                     }
-                    Button {
-                        settings.resetAll()
-                    } label: {
-                        Text("Reset all settings to default")
-                            .foregroundStyle(.red)
+                    .accessibilityIdentifier("resetDesignButton")
+                    Button("Reset all settings to default", role: .destructive) {
+                        confirmResetAll = true
                     }
-
+                    .accessibilityIdentifier("resetAllButton")
                 } header: {
                     Text("Reset")
                 }
             }
             .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
-                    .buttonStyleIfAvailableGlassProminent()
+                        .buttonStyleIfAvailableGlassProminent()
+                        .accessibilityIdentifier("doneButton")
                 }
+            }
+            .alert("Reset all settings?", isPresented: $confirmResetAll) {
+                Button("Reset", role: .destructive) { settings.resetAll() }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("All colors and display options will be restored to their defaults.")
             }
         }
     }
+
+    private func colorPicker(_ title: LocalizedStringKey, hex: String, id: String, set: @escaping (Color) -> Void) -> some View {
+        ColorPicker(title, selection: Binding(get: { Color(hex: hex) }, set: set), supportsOpacity: false)
+            .accessibilityIdentifier(id)
+    }
+
+    /// "1.0 (Build 2)", or a localized fallback if the bundle info is missing.
+    static var versionString: String {
+        let info = Bundle.main.infoDictionary
+        guard let version = info?["CFBundleShortVersionString"] as? String,
+              let build = info?["CFBundleVersion"] as? String else {
+            return String(localized: "Not available")
+        }
+        return "\(version) (Build \(build))"
+    }
 }
 
-/**
- Preview provider for SettingsScreen with default SettingsModel.
- */
-struct SettingsScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsScreen(settings: SettingsModel())
-    }
+#Preview {
+    SettingsScreen(settings: SettingsModel(store: UserDefaults(suiteName: "preview")!, reloadsWidgets: false))
 }
