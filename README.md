@@ -25,6 +25,7 @@ The main goal of WhateverClock is to provide a clear, accurate, and visually app
 ### Prerequisites
 
 - Xcode 26.2+
+- XcodeGen (tested with 2.46)
 - iOS 17.6+
 - Swift 5.9+
 
@@ -36,8 +37,17 @@ The main goal of WhateverClock is to provide a clear, accurate, and visually app
    git clone https://github.com/marchein/WhateverClock.git
    ```
 
-2. Open `WhateverClock.xcodeproj` in Xcode.
-3. Select your simulator or device, then build and run.
+2. Generate the Xcode project with [XcodeGen](https://github.com/yonaskolb/XcodeGen) (the `.xcodeproj` is not checked in):
+
+   ```bash
+   brew install xcodegen
+   xcodegen generate
+   ```
+
+3. Open `WhateverClock.xcodeproj` in Xcode.
+4. Select your simulator or device, then build and run.
+
+Project settings, targets and schemes live in `project.yml`. After adding/removing files or changing settings, run `xcodegen generate` again instead of editing the project in Xcode. For Xcode Cloud, `ci_scripts/ci_post_clone.sh` generates the project automatically.
 
 ## Tests
 
