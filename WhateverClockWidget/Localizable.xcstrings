@@ -1,0 +1,16 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "Shows the WhateverClock analog clock with your custom colors." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeigt die analoge WhateverClock-Uhr in deinen eigenen Farben."
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

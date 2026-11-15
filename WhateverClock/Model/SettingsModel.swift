@@ -2,115 +2,101 @@ import SwiftUI
 import Combine
 import WidgetKit
 
-/// Shared UserDefaults suite used by both the app and the widget extension.
-private let appGroupStore = UserDefaults(suiteName: "group.de.marc-hein.WhateverClock")
-
 /**
- `SettingsModel` stores and manages user settings for WhateverClock, with automatic persistence using `@AppStorage`.
- 
- Settings are written to a shared App Group UserDefaults container so that the widget
- extension can read them without any additional synchronisation.
- 
- Provides convenience methods for color manipulation and resetting settings to default values.
- Designed for use as an observable object in the application's settings workflow.
+ `SettingsModel` stores and manages user settings for WhateverClock.
+
+ Values are persisted to a `UserDefaults` store, by default the shared App Group
+ container, so the widget extension can read them (see `ClockAppearance`).
  */
 final class SettingsModel: ObservableObject {
-    /// Hex string representing the clock face color. Persisted via AppStorage.
-    @AppStorage("clockFaceColor", store: appGroupStore) var clockFaceColorHex: String = Color.white.hex
-    /// Hex string representing the number color. Persisted via AppStorage.
-    @AppStorage("numberColor", store: appGroupStore) var numberColorHex: String = Color.black.hex
-    /// Hex string representing the index color. Persisted via AppStorage.
-    @AppStorage("indexColor", store: appGroupStore) var indexColorHex: String = Color.black.hex
-    /// Hex string representing the hands color. Persisted via AppStorage.
-    @AppStorage("handsColor", store: appGroupStore) var handsColorHex: String = Color.black.hex
-    /// Hex string representing the seconds hand color. Persisted via AppStorage.
-    @AppStorage("secondsColor", store: appGroupStore) var secondsColorHex: String = Color.red.hex
-    /// Boolean value that couples index and number color. Persisted via AppStorage.
-    @AppStorage("coupleIndexNumberColor", store: appGroupStore) var coupleIndexNumberColor: Bool = true
-    /// Double value representing clock size. Persisted via AppStorage.
-    @AppStorage("clockSize", store: appGroupStore) var clockSize: Double = 320
-    /// Boolean value for seconds hand visibility. Persisted via AppStorage.
-    @AppStorage("showSeconds", store: appGroupStore) var showSeconds: Bool = true
-    /// Boolean value for milliseconds hand visibility. Persisted via AppStorage.
-    @AppStorage("showMilliseconds", store: appGroupStore) var showMilliseconds: Bool = false
-    /// Boolean value for 24-hour display. Persisted via AppStorage.
-    @AppStorage("show24h", store: appGroupStore) var show24h: Bool = true
+    private typealias K = ClockSettings.Key
+    private typealias D = ClockSettings.Defaults
 
-    /// Cancellable for observing settings changes and triggering widget reloads.
-    private var widgetReloadCancellable: AnyCancellable?
+    @Published var clockFaceColorHex: String { didSet { persist(clockFaceColorHex, K.clockFaceColor) } }
+    @Published var numberColorHex: String { didSet { persist(numberColorHex, K.numberColor) } }
+    @Published var indexColorHex: String { didSet { persist(indexColorHex, K.indexColor) } }
+    @Published var handsColorHex: String { didSet { persist(handsColorHex, K.handsColor) } }
+    @Published var secondsColorHex: String { didSet { persist(secondsColorHex, K.secondsColor) } }
+    @Published var coupleIndexNumberColor: Bool { didSet { persist(coupleIndexNumberColor, K.coupleIndexNumberColor) } }
+    @Published var showSeconds: Bool { didSet { persist(showSeconds, K.showSeconds) } }
+    @Published var showMilliseconds: Bool { didSet { persist(showMilliseconds, K.showMilliseconds) } }
+    @Published var show24h: Bool { didSet { persist(show24h, K.show24h) } }
 
-    init() {
-        // Reload the widget timeline whenever any setting changes so the widget
-        // always reflects the latest appearance.
-        widgetReloadCancellable = objectWillChange
-            .receive(on: DispatchQueue.main)
-            .sink { _ in
-                // Execute after the current change is committed.
-                DispatchQueue.main.async {
-                    WidgetCenter.shared.reloadAllTimelines()
-                }
-            }
+    private let store: UserDefaults
+    private let reloadsWidgets: Bool
+    private var widgetReloadTask: Task<Void, Never>?
+
+    /**
+     - Parameters:
+        - store: Where settings are persisted. Defaults to the shared App Group store.
+        - reloadsWidgets: Whether changes trigger a (debounced) widget timeline reload.
+     */
+    init(store: UserDefaults = ClockSettings.sharedStore, reloadsWidgets: Bool = true) {
+        self.store = store
+        self.reloadsWidgets = reloadsWidgets
+        let appearance = ClockAppearance(store: store)
+        clockFaceColorHex = appearance.clockFaceColorHex
+        numberColorHex = appearance.numberColorHex
+        indexColorHex = appearance.indexColorHex
+        handsColorHex = appearance.handsColorHex
+        secondsColorHex = appearance.secondsColorHex
+        coupleIndexNumberColor = appearance.coupleIndexNumberColor
+        showSeconds = appearance.showSeconds
+        showMilliseconds = store.object(forKey: K.showMilliseconds) as? Bool ?? D.showMilliseconds
+        show24h = store.object(forKey: K.show24h) as? Bool ?? D.show24h
     }
 
-    /**
-     Converts a hex string to a `Color` object.
-     
-     - Parameter hex: The hex string representing the color.
-     - Returns: The corresponding `Color`.
-     */
+    /// Snapshot of the current appearance, identical to what the widget reads.
+    var appearance: ClockAppearance { ClockAppearance(store: store) }
+
+    /// Whether the milliseconds option has any effect (requires seconds).
+    var millisecondsAvailable: Bool { showSeconds }
+
+    /// Converts a hex string to a `Color`.
     func color(from hex: String) -> Color { Color(hex: hex) }
 
-    /**
-     Sets the number color and, if coupled, the index color as well.
-     
-     - Parameter color: The new `Color` for numbers (and indexes if coupled).
-     */
+    /// Sets the number color and, if coupled, the index color as well.
     func setNumberColor(_ color: Color) {
         numberColorHex = color.hex
         if coupleIndexNumberColor { indexColorHex = color.hex }
     }
 
-    /**
-     Sets the index color independently.
-     
-     - Parameter color: The new `Color` for indexes.
-     */
     func setIndexColor(_ color: Color) { indexColorHex = color.hex }
-
-    /**
-     Sets the clock face color.
-     
-     - Parameter color: The new `Color` for the clock face.
-     */
     func setClockFaceColor(_ color: Color) { clockFaceColorHex = color.hex }
-    
-    /**
-     Sets the seconds hand color.
-     
-     - Parameter color: The new `Color` for the seconds hand.
-     */
+    func setHandsColor(_ color: Color) { handsColorHex = color.hex }
     func setSecondsColor(_ color: Color) { secondsColorHex = color.hex }
 
-    /**
-     Resets only the design-related settings to default values.
-     */
+    /// Resets only the design-related settings to default values.
     func resetDesign() {
-        clockFaceColorHex = Color.white.hex
-        numberColorHex = Color.black.hex
-        indexColorHex = Color.black.hex
-        handsColorHex = Color.gray.hex
-        secondsColorHex = Color.red.hex
-        coupleIndexNumberColor = true
+        clockFaceColorHex = D.clockFaceColorHex
+        numberColorHex = D.numberColorHex
+        indexColorHex = D.indexColorHex
+        handsColorHex = D.handsColorHex
+        secondsColorHex = D.secondsColorHex
+        coupleIndexNumberColor = D.coupleIndexNumberColor
     }
 
-    /**
-     Resets all settings to default values, including design and functional options.
-     */
+    /// Resets all settings to default values, including design and functional options.
     func resetAll() {
         resetDesign()
-        clockSize = 320
-        showSeconds = true
-        showMilliseconds = false
-        show24h = true
+        showSeconds = D.showSeconds
+        showMilliseconds = D.showMilliseconds
+        show24h = D.show24h
+    }
+
+    private func persist(_ value: Any, _ key: String) {
+        store.set(value, forKey: key)
+        scheduleWidgetReload()
+    }
+
+    /// Debounced so dragging a color picker doesn't burn through the widget reload budget.
+    private func scheduleWidgetReload() {
+        guard reloadsWidgets else { return }
+        widgetReloadTask?.cancel()
+        widgetReloadTask = Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(500))
+            guard !Task.isCancelled else { return }
+            WidgetCenter.shared.reloadAllTimelines()
+        }
     }
 }

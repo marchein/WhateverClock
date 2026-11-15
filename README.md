@@ -24,9 +24,10 @@ The main goal of WhateverClock is to provide a clear, accurate, and visually app
 
 ### Prerequisites
 
-- Xcode 16.0+
-- iOS 16.6+
-- Swift 5.7+
+- Xcode 26.2+
+- XcodeGen (tested with 2.46)
+- iOS 17.6+
+- Swift 5.9+
 
 ### Installation
 
@@ -36,8 +37,27 @@ The main goal of WhateverClock is to provide a clear, accurate, and visually app
    git clone https://github.com/marchein/WhateverClock.git
    ```
 
-2. Open `WhateverClock.xcodeproj` in Xcode.
-3. Select your simulator or device, then build and run.
+2. Generate the Xcode project with [XcodeGen](https://github.com/yonaskolb/XcodeGen) (the `.xcodeproj` is not checked in):
+
+   ```bash
+   brew install xcodegen
+   xcodegen generate
+   ```
+
+3. Open `WhateverClock.xcodeproj` in Xcode.
+4. Select your simulator or device, then build and run.
+
+Project settings, targets and schemes live in `project.yml`. After adding/removing files or changing settings, run `xcodegen generate` again instead of editing the project in Xcode. For Xcode Cloud, `ci_scripts/ci_post_clone.sh` generates the project automatically.
+
+## Tests
+
+The shared `WhateverClock` scheme contains unit tests (`WhateverClockTests`, Swift Testing) for color conversion, hand angles, digital formatting and settings persistence, and UI tests (`WhateverClockUITests`) covering the main screen, every setting, reset flows, persistence across launches, landscape layout and the German localization.
+
+```bash
+xcodebuild test -project WhateverClock.xcodeproj -scheme WhateverClock -destination 'platform=iOS Simulator,name=iPhone 17'
+```
+
+UI tests launch the app with `--uitesting` (isolated settings store, no widget reloads) and `--reset-settings`.
 
 ## Contributing
 
