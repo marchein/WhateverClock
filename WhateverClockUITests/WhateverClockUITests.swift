@@ -174,10 +174,14 @@ final class WhateverClockUITests: XCTestCase {
         openSettings()
         let picker = app.descendants(matching: .any)["pickerDialColor"]
         XCTAssertTrue(picker.exists)
-        picker.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
-        // The system color picker is presented in its own sheet.
-        let presented = app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS[c] 'Colors' OR identifier CONTAINS[c] 'color'")).firstMatch
-        XCTAssertTrue(presented.waitForExistence(timeout: 5))
+        // The system color picker exposes a `UIColorPickerView` element (iOS 18 additionally titles it "Colors").
+        // Neither is part of the settings form, so this only matches once the picker is really presented.
+        let pickerSheet = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier == %@ OR label == %@", "UIColorPickerView", "Colors"))
+            .firstMatch
+        XCTAssertFalse(pickerSheet.exists, "Color picker must not be visible before tapping")
+        picker.tap()
+        XCTAssertTrue(pickerSheet.waitForExistence(timeout: 5), "System color picker did not open")
     }
 
     // MARK: - Settings: about & reset
